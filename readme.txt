@@ -1,1 +1,1 @@
-# 学生信息管理系统
+student information system
