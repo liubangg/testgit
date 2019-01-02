@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 将namespace的值设置为DAO类对应的路径 -->
+<mapper namespace="com.lbg.dao.SCourseDao">
+    <!-- 增加一条数据 -->
+    <insert id="addSCourse" parameterType="SCourse">
+        INSERT INTO scourse VALUES( #{student_id},#{course_id}, #{mark})
+    </insert>
+
+
+
+    <!-- 更新一条数据 -->
+    <update id="updateSCourse" >
+        UPDATE scourse SET  student_id = #{student_id},course_id = #{course_id},mark = #{mark}
+        WHERE course_id = #{course_id} and student_id = #{student_id}
+    </update>
+    <!-- 删除一条数据 -->
+    <delete id="deleteSCourse"  >
+        DELETE FROM scourse WHERE course_id = #{course_id} and student_id = #{student_id}
+    </delete>
+    <!-- 查询一条数据 -->
+    <select id="getSCourse"  resultMap="scourse">
+        SELECT * FROM scourse WHERE student_id = #{student_id} ORDER BY course_id ASC
+    </select>
+    <select id="getSCourse1"  resultMap="scourse">
+        SELECT * FROM scourse WHERE course_id = #{course_id} and student_id = #{student_id}
+    </select>
+    <select id="selectCount" resultType="int">
+        select count(*) from scourse
+    </select>
+    <resultMap id="scourse" type="scourse">
+        <id column="student_id" property="student_id"/>
+        <id column="course_id" property="course_id"/>
+        <result column="mark" property="mark"/>
+    </resultMap>
+    <select id="findByPage" parameterType="Map" resultMap="scourse">
+        select * from scourse ORDER BY student_id ASC, course_id ASC
+        <if test="start!=null and size!=null">
+            limit #{start},#{size}
+        </if>
+    </select>
+    <!-- 查询从start位置开始的count条数据-->
+    <select id="list" resultMap="scourse">
+        SELECT * FROM scourse ORDER BY student_id ASC, course_id ASC
+    </select>
+</mapper>

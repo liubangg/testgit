@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 将namespace的值设置为DAO类对应的路径 -->
+<mapper namespace="com.lbg.dao.CourseDao">
+    <!-- 增加一条数据 -->
+    <insert id="addCourse" parameterType="Course">
+        INSERT INTO course VALUES( #{course_id}, #{course_name}, #{credit})
+    </insert>
+
+    <!-- 删除一条数据 -->
+    <delete id="deleteCourse" parameterType="Integer">
+        DELETE FROM course WHERE course_id = #{course_id}
+    </delete>
+
+    <!-- 更新一条数据 -->
+    <update id="updateCourse" parameterType="Course">
+        UPDATE course SET course_id = #{course_id}, course_name = #{course_name},
+        credit = #{credit} WHERE course_id = #{course_id}
+    </update>
+
+    <!-- 查询一条数据 -->
+    <select id="getCourse" resultMap="course" parameterType="Integer">
+        SELECT * FROM course WHERE course_id = #{course_id}
+    </select>
+    <select id="selectCount" resultType="int">
+        select count(*) from course
+    </select>
+    <resultMap id="course" type="course">
+        <id column="course_id" property="course_id"/>
+        <result column="course_name" property="course_name"/>
+        <result column="credit" property="credit"/>
+    </resultMap>
+    <select id="findByPage" parameterType="Map" resultMap="course">
+        select * from course ORDER BY course_id ASC
+        <if test="start!=null and size!=null">
+            limit #{start},#{size}
+        </if>
+    </select>
+    <!-- 查询从start位置开始的count条数据-->
+    <select id="list" resultMap="course">
+        SELECT * FROM course ORDER BY course_id ASC
+    </select>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 将namespace的值设置为DAO类对应的路径 -->
+<mapper namespace="com.lbg.dao.StudentDao">
+    <!-- 增加一条数据 -->
+    <insert id="addStudent" parameterType="Student">
+        INSERT INTO student VALUES( #{student_id}, #{name}, #{sex}, #{major}, #{age}, #{telephone_number}, #{birthday})
+    </insert>
+
+    <!-- 删除一条数据 -->
+    <delete id="deleteStudent" parameterType="Long">
+        DELETE FROM student WHERE student_id = #{student_id}
+    </delete>
+
+    <!-- 更新一条数据 -->
+    <update id="updateStudent" parameterType="Student">
+        UPDATE student SET student_id = #{student_id}, name = #{name},
+        sex = #{sex},major = #{major}, age = #{age},telephone_number = #{telephone_number}, birthday = #{birthday} WHERE student_id = #{student_id}
+    </update>
+
+    <!-- 查询一条数据 -->
+    <select id="getStudent" resultMap="student" parameterType="Long">
+        SELECT student_id,name,sex,major,age,telephone_number,birthday FROM student WHERE student_id = #{student_id}
+    </select>
+    <select id="selectCount" resultType="int">
+        select count(*) from student
+    </select>
+    <resultMap id="student" type="student">
+        <id column="student_id" property="student_id"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="major" property="major"/>
+        <result column="age" property="age"/>
+        <result column="telephone_number" property="telephone_number"/>
+        <result column="birthday" property="birthday"/>
+    </resultMap>
+    <select id="findByPage" parameterType="Map" resultMap="student">
+        select * from student ORDER BY student_id ASC
+        <if test="start!=null and size!=null">
+            limit #{start},#{size}
+        </if>
+    </select>
+    <!-- 查询从start位置开始的count条数据-->
+    <select id="list" resultMap="student">
+        SELECT * FROM student ORDER BY student_id ASC
+    </select>
+</mapper>
